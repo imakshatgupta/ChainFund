@@ -19,6 +19,7 @@ export const navLinks = [
   {
     id: "home",
     title: "Home",
+    link:'/'
   },
   {
     id: "features",
@@ -43,23 +44,23 @@ export const features = [
   {
     id: "feature-1",
     icon: star,
-    title: "Rewards",
+    title: "Transparent Transactions",
     content:
-      "The best credit cards offer some tantalizing combinations of promotions and prizes",
+      "Experience transparent transactions powered by blockchain technology.",
   },
   {
     id: "feature-2",
     icon: shield,
-    title: "100% Secured",
+    title: "Smart Contracts",
     content:
-      "We take proactive steps make sure your information and transactions are secure.",
+      "Utilize smart contracts to automate and enforce agreements, ensuring trustless and secure interactions without intermediaries.",
   },
   {
     id: "feature-3",
     icon: send,
-    title: "Balance Transfer",
+    title: "Decentralized Banking",
     content:
-      "A balance transfer credit card can save you a lot of money in interest charges.",
+      "Embrace decentralized banking to take control of your finances, with no central authority governing your transactions and assets.",
   },
 ];
 

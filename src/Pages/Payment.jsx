@@ -1,6 +1,12 @@
-import { features } from "../constants";
-import styles, { layout } from "../style";
-import Button from "./Button";
+import React from 'react'
+import { Navbar } from '../components'
+import styles, { layout } from '../style'
+import SpringModal from '../components/CheckBalanceModal'
+import { features } from '../constants'
+import Button from '../components/Button'
+import TransferModal from '../components/TransferbalanceModal'
+import { Link } from 'react-router-dom'
+
 
 const FeatureCard = ({ icon, title, content, index }) => (
   <div className={`flex flex-row p-6 rounded-[20px] ${index !== features.length - 1 ? "mb-6" : "mb-0"} feature-card`}>
@@ -18,25 +24,31 @@ const FeatureCard = ({ icon, title, content, index }) => (
   </div>
 );
 
-const Business = () =>  (
-  <section id="features" className={layout.section} data-aos="fade-up">
-    <div className={layout.sectionInfo}>
+const Payment = () => {
+  return (
+    <>
+      <div className={`${styles.boxWidth} p-6 grid items-center`}>
+        <Navbar />
+      <section id="features" className="flex justify-center items-center p-[130px]">
+     <div className={layout.sectionInfo}>
       <h2 className={styles.heading2}>
-      Enhance Your Financial <br className="sm:block hidden" /> Journey with Us
+      All your Banking <br className="sm:block hidden" /> at one place
       </h2>
       <p className={`${styles.paragraph} max-w-[470px] mt-5`}>
       Experience true financial sovereignty with our decentralized banking platform. Harness the power of blockchain technology to ensure security, transparency, and control over your finances like never before.
       </p>
-
-      <Button styles={`mt-10`} />
     </div>
 
-    <div className={`${layout.sectionImg} flex-col`}>
-      {features.map((feature, index) => (
-        <FeatureCard key={feature.id} {...feature} index={index} />
-      ))}
+    <div className={`${layout.sectionImg} flex-col gap-8`}>
+    <SpringModal/>
+    <TransferModal/>
+    <Link to='/transaction-history' className='p-8 font-poppins font-medium text-[28px] text-primary bg-blue-gradient rounded-[10px] outline-none' >Transaction History</Link>
     </div>
   </section>
-);
+      </div>
+      
+    </>
+  )
+}
 
-export default Business;
+export default Payment
