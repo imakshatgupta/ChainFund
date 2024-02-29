@@ -5,7 +5,7 @@ import ChainFund from "./Pages/ChainFund/ChainFund";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import ShowCampaigns from "./Pages/ChainFund/ShowCampaigns";
 import CreateCampaign from "./Pages/ChainFund/CreateCampaign";
-import About from "../../ChainFund/src/Pages/About";
+import About from "./Pages/ChainFund/About";
 
 const App = () => (
   <div>
