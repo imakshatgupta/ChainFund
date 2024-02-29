@@ -5,7 +5,6 @@ import ChainFund from "./Pages/ChainFund/ChainFund";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import ShowCampaigns from "./Pages/ChainFund/ShowCampaigns";
 import CreateCampaign from "./Pages/ChainFund/CreateCampaign";
-import About from "../../ChainFund/src/Pages/About";
 
 const App = () => (
   <div>
@@ -15,7 +14,9 @@ const App = () => (
         <Route path="/chainfund" element={<ChainFund />} />
         <Route path="/show-campaigns" element={<ShowCampaigns />} />
         <Route path="/create-campaign" element={<CreateCampaign />} />
-        <Route path="/news" element={<About />} />
+        <Route path="/news" element={<ChainFund />} />
+        <Route path="/chainfund" element={<ChainFund />} />
+        <Route path="/chainfund" element={<ChainFund />} />
       </Routes>
     </Router>
   </div>
