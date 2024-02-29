@@ -3,6 +3,7 @@ import styles from '../style'
 import { discount } from '../assets'
 import { robot } from '../assets'
 import GetStarted from "./GetStarted"
+import { Link } from 'react-router-dom'
 
 const Hero = () => (
 
@@ -16,7 +17,9 @@ const Hero = () => (
         </h1>
 
         <div className='ss:flex hidden md:mr-4 mr-0'>
+          <Link to='/payment'>
           <GetStarted />
+          </Link>
         </div>
       </div>
 

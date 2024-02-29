@@ -2,6 +2,7 @@ import React from 'react'
 import { useState } from 'react';
 import { close, logo, menu } from "../assets";
 import { navLinks } from "../constants";
+import { Link } from 'react-router-dom';
 
 
 const Navbar = () => {
@@ -9,7 +10,7 @@ const Navbar = () => {
     return (
         <nav className="w-full flex py-6 justify-between items-center navbar bg-black">
 
-            <h1 className='text-[42px] font-bold text-white'>CoinVault</h1>
+            <Link to='/'><h1 className='text-[42px] font-bold text-white'>CoinVault</h1></Link>
 
             <ul className='list-none sm:flex hidden justify-end items-center flex-1'>
                 {navLinks.map((nav, index) => (

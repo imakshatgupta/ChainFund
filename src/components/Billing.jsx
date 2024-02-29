@@ -14,13 +14,11 @@ const Billing = () => (
 
     <div className={layout.sectionInfo}>
       <h2 className={styles.heading2}>
-        Easily control your <br className="sm:block hidden" /> billing &
-        invoicing
+      Enhance Security with <br className="sm:block hidden" /> Decentralized Banking
       </h2>
       <p className={`${styles.paragraph} max-w-[470px] mt-5`}>
-        Elit enim sed massa etiam. Mauris eu adipiscing ultrices ametodio
-        aenean neque. Fusce ipsum orci rhoncus aliporttitor integer platea
-        placerat.
+      Empower yourself with a banking system that puts security first. Utilizing cutting-edge blockchain technology, our decentralized platform ensures your assets remain safe and transparent.
+      
       </p>
 
       <div className="flex flex-row flex-wrap sm:mt-10 mt-6">
