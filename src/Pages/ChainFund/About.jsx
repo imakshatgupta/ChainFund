@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Navbar from "./Components/Navbar";
-import "/Users/harsh/Desktop/practicum/ChainFund/src/index.css";
+import "../../../src/index.css";
 
 const About = () => {
   return (
