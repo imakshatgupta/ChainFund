@@ -13,15 +13,15 @@ const transactionsContract = new web3.eth.Contract(
 async function makeCryptoPayment(receiverAddress, amount) {
   console.log(receiverAddress, amount);
   const amountCrypto = amount * 1000000000000000000;
-  console.log(amountCrypto)
+  console.log(amountCrypto);
   const accounts = await web3.eth.getAccounts();
-  const amountInWei = web3.utils.toWei(amount.toString(), 'ether');
+  const amountInWei = web3.utils.toWei(amount.toString(), "ether");
 
-const transaction = await transactionsContract.methods
+  const transaction = await transactionsContract.methods
     .addToBlockchain(receiverAddress, amountCrypto)
     .send({
-        from: accounts[0],
-        value: amountInWei,
+      from: accounts[0],
+      value: amountInWei,
     });
   console.log("Transaction Hash:", transaction.transactionHash);
 }
@@ -29,9 +29,9 @@ const transaction = await transactionsContract.methods
 async function getBalance() {
   const accounts = await web3.eth.getAccounts();
   const balance = await web3.eth.getBalance(accounts[0]);
-  console.log("Balance in Wei:", balance);
-  console.log("Balance in Ether:", web3.utils.fromWei(balance, "ether"));
+  const balanceInEther = web3.utils.fromWei(balance, "ether");
+  console.log("Balance in Matic:", balanceInEther);
+  return balanceInEther;
 }
 
-
-export { makeCryptoPayment , getBalance};
+export { makeCryptoPayment, getBalance };

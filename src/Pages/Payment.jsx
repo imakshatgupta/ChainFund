@@ -1,16 +1,22 @@
-import React from 'react'
-import { Navbar } from '../components'
-import styles, { layout } from '../style'
-import SpringModal from '../components/CheckBalanceModal'
-import { features } from '../constants'
-import Button from '../components/Button'
-import TransferModal from '../components/TransferbalanceModal'
-import { Link } from 'react-router-dom'
-
+import Web3 from "web3";
+const web3 = new Web3(window.ethereum);
+import React from "react";
+import { Navbar } from "../components";
+import styles, { layout } from "../style";
+import SpringModal from "../components/CheckBalanceModal";
+import { features } from "../constants";
+import Button from "../components/Button";
+import TransferModal from "../components/TransferbalanceModal";
 
 const FeatureCard = ({ icon, title, content, index }) => (
-  <div className={`flex flex-row p-6 rounded-[20px] ${index !== features.length - 1 ? "mb-6" : "mb-0"} feature-card`}>
-    <div className={`w-[64px] h-[64px] rounded-full ${styles.flexCenter} bg-dimBlue`}>
+  <div
+    className={`flex flex-row p-6 rounded-[20px] ${
+      index !== features.length - 1 ? "mb-6" : "mb-0"
+    } feature-card`}
+  >
+    <div
+      className={`w-[64px] h-[64px] rounded-full ${styles.flexCenter} bg-dimBlue`}
+    >
       <img src={icon} alt="star" className="w-[50%] h-[50%] object-contain" />
     </div>
     <div className="flex-1 flex flex-col ml-3">
@@ -25,30 +31,47 @@ const FeatureCard = ({ icon, title, content, index }) => (
 );
 
 const Payment = () => {
+  const handleSubmit = async () => {
+    const accounts = await web3.eth.getAccounts();
+    const currentAddress = accounts[0];
+    console.log(currentAddress);
+    window.location.href = `https://www.oklink.com/amoy/address/${currentAddress}`;
+  };
+
   return (
     <>
       <div className={`${styles.boxWidth} p-6 grid items-center`}>
         <Navbar />
-      <section id="features" className="flex justify-center items-center p-[130px]">
-     <div className={layout.sectionInfo}>
-      <h2 className={styles.heading2}>
-      All your Banking <br className="sm:block hidden" /> at one place
-      </h2>
-      <p className={`${styles.paragraph} max-w-[470px] mt-5`}>
-      Experience true financial sovereignty with our decentralized banking platform. Harness the power of blockchain technology to ensure security, transparency, and control over your finances like never before.
-      </p>
-    </div>
+        <section
+          id="features"
+          className="flex justify-center items-center p-[130px]"
+        >
+          <div className={layout.sectionInfo}>
+            <h2 className={styles.heading2}>
+              All your Banking <br className="sm:block hidden" /> at one place
+            </h2>
+            <p className={`${styles.paragraph} max-w-[470px] mt-5`}>
+              Experience true financial sovereignty with our decentralized
+              banking platform. Harness the power of blockchain technology to
+              ensure security, transparency, and control over your finances like
+              never before.
+            </p>
+          </div>
 
-    <div className={`${layout.sectionImg} flex-col gap-8`}>
-    <SpringModal/>
-    <TransferModal/>
-    <Link to='/transaction-history' className='p-8 font-poppins font-medium text-[28px] text-primary bg-blue-gradient rounded-[10px] outline-none' >Transaction History</Link>
-    </div>
-  </section>
+          <div className={`${layout.sectionImg} flex-col gap-8`}>
+            <SpringModal />
+            <TransferModal />
+            <h1
+              className="p-8 font-poppins font-medium text-[28px] text-primary bg-blue-gradient rounded-[10px] outline-none"
+              onClick={handleSubmit}
+            >
+              Transaction History
+            </h1>
+          </div>
+        </section>
       </div>
-      
     </>
-  )
-}
+  );
+};
 
-export default Payment
+export default Payment;

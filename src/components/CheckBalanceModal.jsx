@@ -1,18 +1,33 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import { styled, css } from '@mui/system';
-import { Modal as BaseModal } from '@mui/base/Modal';
-import { Button } from '@mui/base/Button';
-import { useSpring, animated } from '@react-spring/web';
+import * as React from "react";
+import { useState } from "react";
+import PropTypes from "prop-types";
+import { styled, css } from "@mui/system";
+import { Modal as BaseModal } from "@mui/base/Modal";
+import { Button } from "@mui/base/Button";
+import { useSpring, animated } from "@react-spring/web";
+import { getBalance } from "../utils/constants";
 
 export default function SpringModal() {
   const [open, setOpen] = React.useState(false);
+  const [balance, setBalance] = useState(0); // State variable to store balance
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const checkBalance = async () => {
+    handleOpen();
+    const fetchedBalance = await getBalance(); // Fetch balance
+    setBalance(fetchedBalance); // Update state with fetched balance
+  };
+
   return (
     <div>
-      <button className='p-8 font-poppins font-medium text-[28px] text-primary bg-blue-gradient rounded-[10px] outline-none' onClick={handleOpen}>Check Balance</button>
+      <button
+        className="p-8 font-poppins font-medium text-[28px] text-primary bg-blue-gradient rounded-[10px] outline-none"
+        onClick={checkBalance}
+      >
+        Check Balance
+      </button>
       <Modal
         aria-labelledby="spring-modal-title"
         aria-describedby="spring-modal-description"
@@ -24,10 +39,10 @@ export default function SpringModal() {
         <Fade in={open}>
           <ModalContent sx={style}>
             <h2 id="spring-modal-title" className="modal-title">
-              Your balance is
+              Your balance
             </h2>
             <span id="spring-modal-description" className="modal-description">
-              {"100"}
+              {balance} MATIC
             </span>
           </ModalContent>
         </Fade>
@@ -35,7 +50,6 @@ export default function SpringModal() {
     </div>
   );
 }
-
 
 const Backdrop = React.forwardRef((props, ref) => {
   const { open, ...other } = props;
@@ -95,45 +109,44 @@ Fade.propTypes = {
 };
 
 const blue = {
-  200: '#99CCFF',
-  300: '#66B2FF',
-  400: '#3399FF',
-  500: '#007FFF',
-  600: '#0072E5',
-  700: '#0066CC',
+  200: "#99CCFF",
+  300: "#66B2FF",
+  400: "#3399FF",
+  500: "#007FFF",
+  600: "#0072E5",
+  700: "#0066CC",
 };
 
 const grey = {
-  50: '#F3F6F9',
-  100: '#E5EAF2',
-  200: '#DAE2ED',
-  300: '#C7D0DD',
-  400: '#B0B8C4',
-  500: '#9DA8B7',
-  600: '#6B7A90',
-  700: '#434D5B',
-  800: '#303740',
-  900: '#1C2025',
+  50: "#F3F6F9",
+  100: "#E5EAF2",
+  200: "#DAE2ED",
+  300: "#C7D0DD",
+  400: "#B0B8C4",
+  500: "#9DA8B7",
+  600: "#6B7A90",
+  700: "#434D5B",
+  800: "#303740",
+  900: "#1C2025",
 };
 
 const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
   width: 400,
-  bgcolor: 'white',
-  border: '2px solid white',
+  bgcolor: "white",
+  border: "2px solid white",
   borderRadius: 1,
-  color: 'black',
-  fontFamily: 'IBM Plex Sans',
+  color: "black",
+  fontFamily: "IBM Plex Sans",
   fontWeight: 500,
-  
 };
 
-const ModalContent = styled('div')(
+const ModalContent = styled("div")(
   ({ theme }) => css`
-    font-family: 'IBM Plex Sans', sans-serif;
+    font-family: "IBM Plex Sans", sans-serif;
     font-weight: 500;
     text-align: start;
     position: relative;
@@ -141,13 +154,13 @@ const ModalContent = styled('div')(
     flex-direction: column;
     gap: 8px;
     overflow: hidden;
-    background-color: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
+    background-color: ${theme.palette.mode === "dark" ? grey[900] : "#fff"};
     border-radius: 8px;
-    border: 1px solid ${theme.palette.mode === 'dark' ? grey[700] : grey[200]};
+    border: 1px solid ${theme.palette.mode === "dark" ? grey[700] : grey[200]};
     box-shadow: 0 4px 12px
-      ${theme.palette.mode === 'dark' ? 'rgb(0 0 0 / 0.5)' : 'rgb(0 0 0 / 0.2)'};
+      ${theme.palette.mode === "dark" ? "rgb(0 0 0 / 0.5)" : "rgb(0 0 0 / 0.2)"};
     padding: 44px;
-    color: ${theme.palette.mode === 'dark' ? grey[50] : grey[900]};
+    color: ${theme.palette.mode === "dark" ? grey[50] : grey[900]};
 
     & .modal-title {
       margin: 0;
@@ -163,12 +176,12 @@ const ModalContent = styled('div')(
       margin-bottom: 4px;
       font-size: 1.5rem;
     }
-  `,
+  `
 );
 
 const TriggerButton = styled(Button)(
   ({ theme }) => css`
-    font-family: 'IBM Plex Sans', sans-serif;
+    font-family: "IBM Plex Sans", sans-serif;
     font-weight: 600;
     font-size: 1.875rem;
     line-height: 1.5;
@@ -176,23 +189,24 @@ const TriggerButton = styled(Button)(
     border-radius: 8px;
     transition: all 150ms ease;
     cursor: pointer;
-    background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
-    border: 1px solid ${theme.palette.mode === 'dark' ? grey[700] : grey[200]};
-    color: ${theme.palette.mode === 'dark' ? grey[200] : grey[900]};
+    background: ${theme.palette.mode === "dark" ? grey[900] : "#fff"};
+    border: 1px solid ${theme.palette.mode === "dark" ? grey[700] : grey[200]};
+    color: ${theme.palette.mode === "dark" ? grey[200] : grey[900]};
     box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 
     &:hover {
-      background: ${theme.palette.mode === 'dark' ? grey[800] : grey[50]};
-      border-color: ${theme.palette.mode === 'dark' ? grey[600] : grey[300]};
+      background: ${theme.palette.mode === "dark" ? grey[800] : grey[50]};
+      border-color: ${theme.palette.mode === "dark" ? grey[600] : grey[300]};
     }
 
     &:active {
-      background: ${theme.palette.mode === 'dark' ? grey[700] : grey[100]};
+      background: ${theme.palette.mode === "dark" ? grey[700] : grey[100]};
     }
 
     &:focus-visible {
-      box-shadow: 0 0 0 4px ${theme.palette.mode === 'dark' ? blue[300] : blue[200]};
+      box-shadow: 0 0 0 4px
+        ${theme.palette.mode === "dark" ? blue[300] : blue[200]};
       outline: none;
     }
-  `,
+  `
 );
