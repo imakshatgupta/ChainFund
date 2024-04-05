@@ -1,3 +1,5 @@
+import Web3 from "web3";
+const web3 = new Web3(window.ethereum);
 import React, { useState, useEffect } from "react";
 import Navbar from "./Components/Navbar";
 import { Link } from "react-router-dom";
@@ -12,11 +14,11 @@ const ShowCampaigns = () => {
   }, []);
   console.log(crowdContract)
   const loadBlockchainData = async () => {
-    if (window.ethereum) {
+    console.log(crowdContract);
+    if (web3.eth) {
       try {
-        console.log("heelo")
-        const campaignsFromContract = await crowdContract.methods.getCampaigns();
-        console.log(crowdContract.methods.getCampaigns().call())
+        const campaignsFromContract = await crowdContract.methods.getCampaigns().call(); // Fetch campaigns from contract
+        console.log(campaignsFromContract);
         const campaignsList = [];
 
         for (let i = 0; i < campaignsFromContract.length; i++) {
@@ -27,18 +29,20 @@ const ShowCampaigns = () => {
 
         setCampaigns(campaignsList);
       } catch (error) {
-        console.error('Error loading blockchain data:', error);
+        console.error("Error loading blockchain data:", error);
       }
     }
   };
 
   const getImageFromPinata = async (imageHash) => {
     try {
-      const response = await axios.get(`https://gateway.pinata.cloud/ipfs/${imageHash}`);
+      const response = await axios.get(
+        `https://gateway.pinata.cloud/ipfs/${imageHash}`
+      );
       return response.data;
     } catch (error) {
-      console.error('Error fetching image from Pinata:', error);
-      return ''; // Return empty string if image fetching fails
+      console.error("Error fetching image from Pinata:", error);
+      return ""; // Return empty string if image fetching fails
     }
   };
 
@@ -56,8 +60,15 @@ const ShowCampaigns = () => {
           <div class="collection-list w-dyn-list">
             <div role="list" class="posts-collection-list w-dyn-items">
               {campaigns.map((campaign, index) => (
-                <div role="listitem" class="_3-collection-item w-dyn-item" key={index}>
-                  <Link to={`/campaign/${index}`} class="link-block-2 w-inline-block">
+                <div
+                  role="listitem"
+                  class="_3-collection-item w-dyn-item"
+                  key={index}
+                >
+                  <Link
+                    to={`/campaign/${index}`}
+                    class="link-block-2 w-inline-block"
+                  >
                     <img
                       src={campaign.image}
                       loading="lazy"
