@@ -1,6 +1,7 @@
 const hre = require('hardhat');
 
 const main = async () => {
+  console.log("Deploying contracts...")
     const campaignFactory = await hre.ethers.getContractFactory("CrowdFunding");
     const campaignContract = await campaignFactory.deploy();
   

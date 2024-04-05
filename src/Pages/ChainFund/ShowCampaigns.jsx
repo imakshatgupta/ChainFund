@@ -10,11 +10,13 @@ const ShowCampaigns = () => {
   useEffect(() => {
     loadBlockchainData();
   }, []);
-
+  console.log(crowdContract)
   const loadBlockchainData = async () => {
     if (window.ethereum) {
       try {
-        const campaignsFromContract = await crowdContract.methods.getCampaigns().call();
+        console.log("heelo")
+        const campaignsFromContract = await crowdContract.methods.getCampaigns();
+        console.log(crowdContract.methods.getCampaigns().call())
         const campaignsList = [];
 
         for (let i = 0; i < campaignsFromContract.length; i++) {
