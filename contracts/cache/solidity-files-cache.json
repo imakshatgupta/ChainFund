@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "C:\\Users\\Akshat\\OneDrive\\Desktop\\coding\\practicum 4\\CoinVault\\contracts\\contracts\\CrowdFunding.sol": {
-      "lastModificationDate": 1712342845572,
-      "contentHash": "6e963bea5b3f295105568719adc4dc10",
+      "lastModificationDate": 1712350065695,
+      "contentHash": "22b2102059d84104f1d54204f7e8e1b8",
       "sourceName": "contracts/CrowdFunding.sol",
       "solcConfig": {
         "version": "0.8.0",
@@ -28,9 +28,7 @@
           }
         }
       },
-      "imports": [
-        "hardhat/console.sol"
-      ],
+      "imports": [],
       "versionPragmas": [
         "^0.8.0"
       ],

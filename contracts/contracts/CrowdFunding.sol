@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.0;
 
-import "hardhat/console.sol";
+pragma solidity ^0.8.0;
 
 contract CrowdFunding {
     struct Campaign {
@@ -21,9 +20,10 @@ contract CrowdFunding {
     uint256 public numberOfCampaigns = 0;
 
     function createCampaign(address _owner, string memory _title, string memory _description, uint256 _target, uint256 _deadline, string memory _image) public returns (uint256) {
-        require(_deadline > block.timestamp, "The deadline should be a date in the future.");
-
         Campaign storage campaign = campaigns[numberOfCampaigns];
+
+        require(campaign.deadline < block.timestamp, "The deadline should be a date in the future.");
+
         campaign.owner = _owner;
         campaign.title = _title;
         campaign.description = _description;
@@ -38,41 +38,33 @@ contract CrowdFunding {
     }
 
     function donateToCampaign(uint256 _id) public payable {
-        require(msg.value > 0, "Donation amount must be greater than 0.");
-        
+        uint256 amount = msg.value;
+
         Campaign storage campaign = campaigns[_id];
 
         campaign.donators.push(msg.sender);
-        campaign.donations.push(msg.value);
+        campaign.donations.push(amount);
 
-        campaign.amountCollected += msg.value;
+        (bool sent,) = payable(campaign.owner).call{value: amount}("");
 
-        payable(campaign.owner).transfer(msg.value);
+        if(sent) {
+            campaign.amountCollected = campaign.amountCollected + amount;
+        }
     }
 
-    function getDonators(uint256 _id) public view returns (address[] memory, uint256[] memory) {
+    function getDonators(uint256 _id) view public returns (address[] memory, uint256[] memory) {
         return (campaigns[_id].donators, campaigns[_id].donations);
     }
 
     function getCampaigns() public view returns (Campaign[] memory) {
         Campaign[] memory allCampaigns = new Campaign[](numberOfCampaigns);
-        
-        for(uint256 i = 0; i < numberOfCampaigns; i++) {
+
+        for(uint i = 0; i < numberOfCampaigns; i++) {
             Campaign storage item = campaigns[i];
-    
-            allCampaigns[i] = Campaign({
-                owner: item.owner,
-                title: item.title,
-                description: item.description,
-                target: item.target,
-                deadline: item.deadline,
-                amountCollected: item.amountCollected,
-                image: item.image,
-                donators: item.donators,
-                donations: item.donations
-            });
+
+            allCampaigns[i] = item;
         }
-    
+
         return allCampaigns;
     }
 }

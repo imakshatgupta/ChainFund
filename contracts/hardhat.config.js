@@ -6,7 +6,7 @@ module.exports = {
     polygon: {
       url: "https://polygon-amoy.g.alchemy.com/v2/uW993CHJWsERkThi2lUunxPCZuSFLulG",
       accounts: [
-        "b48a1c3a4cffe7dd7ac36742811ded621212416d3cad6e3255b0b348353bc9c1",
+        "cfe7ba741ce1327cd75373701e71e399341676f0f53985a86b558fdf3823442e",
       ],
     },
   },

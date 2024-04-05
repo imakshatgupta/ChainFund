@@ -17,9 +17,8 @@ const ShowCampaigns = () => {
     console.log(crowdContract);
     if (web3.eth) {
       try {
-        const campaignsFromContract = await crowdContract.methods
-          .getCampaigns()
-          .call();
+        const campaignsFromContract = await crowdContract.methods.getCampaigns().call(); // Fetch campaigns from contract
+        console.log(campaignsFromContract);
         const campaignsList = [];
 
         for (let i = 0; i < campaignsFromContract.length; i++) {
