@@ -12,7 +12,8 @@ const CreateCampaign = () => {
     campaignDescription: '',
     campaignGoal: '',
     campaignEndDate: '',
-    campaignImage: null, // Added campaignImage field
+    campaignImage: null,
+    aadharNo: '', // Add Aadhar number field to formData
   });
 
   const [fileName, setFileName] = useState('No image selected');
@@ -39,37 +40,33 @@ const CreateCampaign = () => {
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
-    setFormData({ ...formData, campaignImage: selectedFile }); // Update formData with selected file
+    setFormData({ ...formData, campaignImage: selectedFile });
     setFileName(selectedFile.name);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate form data
-    if (!formData.campaignName || !formData.campaignDescription || !formData.campaignGoal || !formData.campaignEndDate || !formData.campaignImage) {
+    if (!formData.campaignName || !formData.campaignDescription || !formData.campaignGoal || !formData.campaignEndDate || !formData.campaignImage || !formData.aadharNo) {
       alert('Please fill in all fields and select an image.');
       return;
     }
 
-    const formDataToSubmit = { ...formData };
-    formDataToSubmit.campaignEndDate = new Date(formDataToSubmit.campaignEndDate).getTime() / 1000;
+    // Add formData.aadharNo to formDataToSubmit
+    const formDataToSubmit = { ...formData, campaignEndDate: new Date(formData.campaignEndDate).getTime() / 1000 };
 
     const formDataForPinata = new FormData();
-    formDataForPinata.append('file', formData.campaignImage); // Use formData's campaignImage
+    formDataForPinata.append('file', formData.campaignImage);
 
     try {
       const resFile = await axios.post('https://api.pinata.cloud/pinning/pinFileToIPFS', formDataForPinata, {
         maxBodyLength: 'Infinity',
         headers: {
           'Content-Type': `multipart/form-data; boundary=${formDataForPinata._boundary}`,
-          Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiI5MWEzZGNkZi00MGE1LTRiN2UtYmVhYy1lNDY2NzMwMTIyOTQiLCJlbWFpbCI6ImhhcnNoYjE1MDAzQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwaW5fcG9saWN5Ijp7InJlZ2lvbnMiOlt7ImlkIjoiRlJBMSIsImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxfSx7ImlkIjoiTllDMSIsImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxfV0sInZlcnNpb24iOjF9LCJtZmFfZW5hYmxlZCI6ZmFsc2UsInN0YXR1cyI6IkFDVElWRSJ9LCJhdXRoZW50aWNhdGlvblR5cGUiOiJzY29wZWRLZXkiLCJzY29wZWRLZXlLZXkiOiJjYWUxOTRhODU3NTRjYjY1MDc1NyIsInNjb3BlZEtleVNlY3JldCI6IjQ2MzZmOTlkYTVhNWNjOTRmNWE5YTk5OGM3MmFlMTY0MDY1M2JhOTgxYzEwMmM4MWQyNDQ5ZTM2M2ZmZDZkZGQiLCJpYXQiOjE3MTIzMzg2MDh9.fE8cZvXkcPa2jdgtS_91_7MMnTLDa4AbyBxZ9vNCXBc'
+          Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiI5MWEzZGNkZi00MGE1LTRiN2UtYmVhYy1lNDY2NzMwMTIyOTQiLCJlbWFpbCI6ImhhcnNoYjE1MDAzQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwaW5fcG9saWN5Ijp7InJlZ2lvbnMiOlt7ImlkIjoiRlJBMSIsImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxfSx7ImlkIjoiTllDMSIsImRlc2lyZWRSZXBsaWNhdGlvbkNvdW50IjoxfV0sInZlcnNpb24iOjF9LCJtZmFfZW5hYmxlZCI6ZmFsc2UsInN0YXR1cyI6IkFDVElWRSJ9LCJhdXRoZW50aWNhdGlvblR5cGUiOiJzY29wZWRLZXkiLCJzY29wZWRLZXlLZXkiOiJjYWUxOTRhODU3NTRjYjY1MDc1NyIsInNjb3BlZEtleVNlY3JldCI6IjQ2MzZmOTlkYTVhNWNjOTRmNWE5YTk5OGM3MmFlMTY0MDY1M2JhOTgxYzEwMmM4MWQyNDQ5ZTM2M2ZmZDZkZGQiLCJpYXQiOjE3MTIzMzg2MDh9.fE8cZvXkcPa2jdgtS_91_7MMnTLDa4AbyBxZ9vNCXBc', // Replace with your Pinata API key
         },
       });
-      console.log('resFile:', resFile)
       const ImgHash = `https://gateway.pinata.cloud/ipfs/${resFile.data.IpfsHash}`;
-
-      
 
       await crowdContract.methods
         .createCampaign(
@@ -78,7 +75,8 @@ const CreateCampaign = () => {
           formDataToSubmit.campaignDescription,
           parseInt(formDataToSubmit.campaignGoal),
           formDataToSubmit.campaignEndDate,
-          ImgHash
+          ImgHash,
+          formDataToSubmit.aadharNo // Pass Aadhar number to createCampaign method
         )
         .send({ from: account });
 
@@ -88,7 +86,8 @@ const CreateCampaign = () => {
         campaignDescription: '',
         campaignGoal: '',
         campaignEndDate: '',
-        campaignImage: null, // Reset campaignImage after submission
+        campaignImage: null,
+        aadharNo: '', // Reset Aadhar number after submission
       });
       setFileName('No image selected');
     } catch (error) {
@@ -102,7 +101,7 @@ const CreateCampaign = () => {
       backgroundImage:
         "url(https://assets-global.website-files.com/62eab5597fa44882d84a8037/645906873acb674bf421f029_bg-image-hero.jpg)",
     }}>
-      <h1 className="text-5xl font-bold text-white text-center mb-10"><Link to='/'>ChainFund</Link></h1>
+      <h1 className="text-5xl font-bold text-white text-center mb-10"><Link to='/chainfund'>ChainFund</Link></h1>
       <form className="bg-transparent bg-opacity-[0.3] bg-white p-5 rounded-lg " onSubmit={handleSubmit}>
         <h1 className="text-3xl font-bold text-center mb-7">Create a Campaign</h1>
         <div className="flex flex-col space-y-3">
@@ -125,6 +124,10 @@ const CreateCampaign = () => {
           <label htmlFor="campaignImage" className="text-lg font-bold">Campaign Image</label>
           <input type="file" id="campaignImage" name="campaignImage" onChange={handleFileChange} className="p-3 rounded-md text-black" />
           <span className="textArea">Image: {fileName}</span>
+        </div>
+        <div className="flex flex-col space-y-3">
+          <label htmlFor="aadharNo" className="text-lg font-bold">Aadhar Number</label>
+          <input type="text" id="aadharNo" name="aadharNo" value={formData.aadharNo} onChange={handleChange} className="p-3 rounded-md text-black" />
         </div>
         <button type="submit" className="bg-green-300 text-black font-bold p-4 rounded-md hover:bg-[#FFD814] hover:text-black transition duration-300 ease-in-out mt-5 ml-[500px]">Create Campaign</button>
       </form>

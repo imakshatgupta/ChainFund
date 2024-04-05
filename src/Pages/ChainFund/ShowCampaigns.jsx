@@ -1,5 +1,3 @@
-import Web3 from "web3";
-const web3 = new Web3(window.ethereum);
 import React, { useState, useEffect } from "react";
 import Navbar from "./Components/Navbar";
 import { Link } from "react-router-dom";
@@ -12,39 +10,35 @@ const ShowCampaigns = () => {
   useEffect(() => {
     loadBlockchainData();
   }, []);
-  console.log(crowdContract)
+
   const loadBlockchainData = async () => {
-    console.log(crowdContract);
-    if (web3.eth) {
+    if (window.ethereum) {
       try {
-        const campaignsFromContract = await crowdContract.methods.getCampaigns().call(); // Fetch campaigns from contract
-        console.log(campaignsFromContract);
+        const campaignsFromContract = await crowdContract.methods.getCampaigns().call();
         const campaignsList = [];
 
         for (let i = 0; i < campaignsFromContract.length; i++) {
           const campaign = campaignsFromContract[i];
-          const image = await getImageFromPinata(campaign.image); // Fetch image from Pinata
+          const image = campaign.image; // Fetch image from Pinata
           campaignsList.push({ ...campaign, image });
         }
 
         setCampaigns(campaignsList);
       } catch (error) {
-        console.error("Error loading blockchain data:", error);
+        console.error('Error loading blockchain data:', error);
       }
     }
   };
 
-  const getImageFromPinata = async (imageHash) => {
-    try {
-      const response = await axios.get(
-        `https://gateway.pinata.cloud/ipfs/${imageHash}`
-      );
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching image from Pinata:", error);
-      return ""; // Return empty string if image fetching fails
-    }
-  };
+  // const getImageFromPinata = async (imageHash) => {
+  //   try {
+  //     const response = await axios.get(`https://gateway.pinata.cloud/ipfs/${imageHash}`);
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error('Error fetching image from Pinata:', error);
+  //     return ''; // Return empty string if image fetching fails
+  //   }
+  // };
 
   return (
     <>
@@ -60,15 +54,8 @@ const ShowCampaigns = () => {
           <div class="collection-list w-dyn-list">
             <div role="list" class="posts-collection-list w-dyn-items">
               {campaigns.map((campaign, index) => (
-                <div
-                  role="listitem"
-                  class="_3-collection-item w-dyn-item"
-                  key={index}
-                >
-                  <Link
-                    to={`/campaign/${index}`}
-                    class="link-block-2 w-inline-block"
-                  >
+                <div role="listitem" class="_3-collection-item w-dyn-item" key={index}>
+                  <Link to={`/campaign/${index}`} class="link-block-2 w-inline-block">
                     <img
                       src={campaign.image}
                       loading="lazy"

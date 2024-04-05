@@ -3,7 +3,7 @@ import CrowdABI from "./CrowdFunding.json";
 const contractABI = CrowdABI.abi;
 const web3 = new Web3(window.ethereum);
 
-const contractAddress = '0x5bc502008c4647a2fc54c0247844b3e75e6919e5';
+const contractAddress = '0x1f58ec03c9474e8a31de9cd8f1ea412f58a4bf3f';
 const crowdContract = new web3.eth.Contract(
     contractABI,
     contractAddress
