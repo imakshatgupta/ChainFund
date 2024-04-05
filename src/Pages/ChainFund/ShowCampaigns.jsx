@@ -12,13 +12,14 @@ const ShowCampaigns = () => {
   useEffect(() => {
     loadBlockchainData();
   }, []);
-  console.log(crowdContract)
+
   const loadBlockchainData = async () => {
     console.log(crowdContract);
     if (web3.eth) {
       try {
-        const campaignsFromContract = await crowdContract.methods.getCampaigns().call(); // Fetch campaigns from contract
-        console.log(campaignsFromContract);
+        const campaignsFromContract = await crowdContract.methods
+          .getCampaigns()
+          .call();
         const campaignsList = [];
 
         for (let i = 0; i < campaignsFromContract.length; i++) {
