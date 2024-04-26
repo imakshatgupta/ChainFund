@@ -7,15 +7,47 @@ import crowdContract from '../../utils/constant2';
 const Campaign = () => {
   const { id } = useParams();
   const [campaign, setCampaign] = useState(null);
-  console.log(campaign)
+  const [contributionAmount, setContributionAmount] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [donators, setDonators] = useState([]);
+
+  const handleContribute = async () => {
+    try {
+      setIsLoading(true);
+      if (!window.ethereum) throw new Error('MetaMask not installed or not connected');
+  
+      // Convert MATIC value to Wei
+      const valueInWei = parseInt(contributionAmount) * 1000000000000000000;
+  
+      // Get the 'from' address from MetaMask
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      const fromAddress = accounts[0]; // Get the first account address from MetaMask
+  
+      // Send transaction to donate to the campaign
+      await crowdContract.methods.donateToCampaign(id).send({ from: fromAddress, value: valueInWei });
+  
+      // Refresh the campaign data after the contribution
+      const campaignData = await crowdContract.methods.getCampaigns().call();
+      const selectedCampaign = campaignData[id];
+      setCampaign(selectedCampaign);
+    } catch (error) {
+      console.error('Error contributing to campaign:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+
   useEffect(() => {
     const fetchCampaign = async () => {
       try {
         if (!window.ethereum) throw new Error('Metamask not installed');
         const campaignData = await crowdContract.methods.getCampaigns().call();
-        
+        const donatorsData = await crowdContract.methods.getDonators(id).call();
+        console.log(donatorsData);
         const selectedCampaign = campaignData[id];
         setCampaign(selectedCampaign);
+        setDonators(donatorsData);
       } catch (error) {
         console.error('Error fetching campaign data:', error);
       }
@@ -44,14 +76,32 @@ const Campaign = () => {
                 </>
               )}
             </div>
-            <label htmlFor="campaignName" className="text-[25px] mb-4 ">Contribution Amount</label>
-            <input type="number" className="p-2 mb-3 w-[200px] rounded-md" placeholder='ETH' />
-            <a
-              href="https://docs.metaplex.com/"
+            <label htmlFor="campaignName" className="text-[25px] mb-4 ">Contribution Amount (MATIC)</label>
+            <input 
+              type="number" 
+              className="p-2 mb-3 w-[200px] rounded-md text-black" 
+              placeholder='MATIC' 
+              value={contributionAmount}
+              onChange={(e) => setContributionAmount(e.target.value)}
+            />
+            <button
+              onClick={handleContribute}
+              disabled={!contributionAmount || isLoading}
               className="hero__cta w-[152px] text-black text-center tracking-[-.01rem] bg-[#fff] rounded-lg py-4 px-2 text-[14px] font-semibold leading-6 inline-block"
             >
-              Contribute
-            </a>
+              {isLoading ? 'Contributing...' : 'Contribute'}
+            </button>
+
+            <div>
+              <h3>Donators:</h3>
+              <ul>     Address:
+                {donators && donators[0] && donators[1] && donators[0].map((donator, index) => (
+                  <li key={index}>
+                {donator}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
           <div className="  text-left flex-col items-start pl-[48px] pr-0 flex h-[30%] w-[50%] float-left min-h-[1px] relative">
             {campaign && (

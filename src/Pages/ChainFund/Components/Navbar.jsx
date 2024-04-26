@@ -25,6 +25,9 @@ const Navbar = () => {
             <div className="uppercase text-lg font-semibold leading-6 no-underline">
               Banking
             </div>
+            <div className="uppercase text-lg pl-10 font-semibold leading-6 no-underline">
+              Investment
+            </div>
           </Link>
           <Link className="h-18 text-gray-400 hover:text-white flex flex-wrap justify-center items-center px-5 text-lg font-semibold leading-6 no-underline">
             <div className="uppercase text-lg font-semibold leading-6 no-underline">
